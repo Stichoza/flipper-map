@@ -212,7 +212,7 @@ const createMarker = file => {
   const keyType = file.content.match(/key type:\s*(.+)/i)?.[1];
   const data = file.content.match(/data:\s*(.+)/i)?.[1]; // Show only with keyType (RFID), otherwise it will display RAW SubGHz data
   const type = {subghz: 'Sub-GHz', nfc: 'NFC', rfid: 'RFID'}[file.type] ?? file.type;
-  const isUnknown = file.name.startsWith('_') || file.name.startsWith('UNK '); // For my personal use case ¯\_(ツ)_/¯
+  const isUnknown = file.name.startsWith('_'); // For my personal use case ¯\_(ツ)_/¯
   
   return L.marker([file.latitude, file.longitude], {
     title: file.name,
