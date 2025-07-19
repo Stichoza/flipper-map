@@ -70,7 +70,7 @@ onMounted(async () => {
   
   map.value = L.map('map', {
     center: window.localStorage.getItem('center')?.split(',') ?? [25, 0],
-    zoom: window.localStorage.getItem('zoom') ?? 2,
+    zoom: window.localStorage.getItem('zoom') ?? 3,
     zoomControl: true,
     worldCopyJump: true,
     layers: layers[baseLayer] ?? layers['Normal'], // In case old naming is stuck in local storage
