@@ -141,7 +141,7 @@ export const useFlipperStore = defineStore('flipper', () => {
 
   const processLine = (line) => {
     if (isSyncing.value && isProcessingDirectories.value) {
-      const matches = line.match(/\[\F\]\s+(\/ext\/(subghz|nfc|lfrfid)\/[A-Za-z0-9_\-\s\./\(\)]+\.(sub|nfc|rfid))\s\d+b/m)
+      const matches = line.match(/\[\F\]\s+(\/ext\/(subghz|nfc|lfrfid)\/[A-Za-z0-9_,\-\s\./\(\)]+\.(sub|nfc|rfid))\s\d+b/m)
 
       if (matches && matches[1]) {
         const filePath = matches[1];
