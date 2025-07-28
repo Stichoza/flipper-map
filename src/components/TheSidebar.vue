@@ -142,6 +142,10 @@ const handleSelectPin = (pin) => {
                     <i class="fas fa-location-dot me-1 small flex-shrink-0" />
                     <span class="text-truncate">{{ pin.distanceText }} away</span>
                   </div>
+                  <div v-else-if="pin.latitude && pin.longitude">
+                    <i class="fas fa-location-pin-lock me-1 small flex-shrink-0" />
+                    <span class="text-truncate">Unknown distance</span>
+                  </div>
                   <div v-else>
                     <i class="fas fa-location-pin-lock me-1 small flex-shrink-0" />
                     <span class="text-truncate">No location</span>
