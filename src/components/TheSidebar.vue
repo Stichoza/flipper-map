@@ -42,7 +42,7 @@ const handleSearch = () => {
 };
 
 const handleSelectPin = (pin) => {
-  if (pin.distance) {
+  if (pin.latitude && pin.longitude) {
     emit('select-pin', pin);
   }
 }
