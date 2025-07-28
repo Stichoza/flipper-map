@@ -28,6 +28,12 @@ watch(() => flipper.connectionError, (error) => {
   }
 });
 
+watch(() => location.locationError, (error) => {
+  if (error) {
+    notify('Location is unavailable. Pins won\'t be sorted by distance', 'warning');
+  }
+});
+
 watch(() => flipper.isConnected, (isConnected) => {
   if (isConnected) {
     notify('Connected to ' + (flipper.hardwareModel ?? 'device') + ': ' + (flipper.hardwareName ?? 'Unknown'), 'success');
