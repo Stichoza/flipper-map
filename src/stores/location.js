@@ -31,7 +31,6 @@ export const useLocationStore = defineStore('location', () => {
       };
     } catch (error) {
       locationError.value = `Error getting location: ${error.message}`;
-      console.error('Error getting location:', error);
     } finally {
       isLoading.value = false;
     }

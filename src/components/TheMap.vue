@@ -107,16 +107,18 @@ onMounted(async () => {
         onClick: async () => {
           await location.getUserLocation();
           const { latitude, longitude } = location.userLocation;
-          toRaw(map.value).flyTo([latitude, longitude], Math.max(defaultZoom, map.value.getZoom()));
+          if (latitude && longitude) {
+            toRaw(map.value).flyTo([latitude, longitude], Math.max(defaultZoom, map.value.getZoom()));
+          }
         },
       },
       ],
     }).addTo(toRaw(map.value))
     
     await location.getUserLocation();
-    const { latitude, longitude } = location.userLocation;
+    const { latitude, longitude } = location.userLocation || {};
     
-    if (!centerWasSet) {
+    if (!centerWasSet && latitude && longitude) {
       map.value.setView([latitude, longitude], defaultZoom);
     }
     
@@ -128,16 +130,20 @@ onMounted(async () => {
       tooltipAnchor: [0, -12],
     });
     
-    userMarker.value = L.marker([latitude, longitude], { icon: pulsingIcon })
-    .addTo(toRaw(map.value))
-    .bindTooltip('Your Location', { direction: 'top' });
+    if (latitude && longitude) {
+      userMarker.value = L.marker([latitude, longitude], { icon: pulsingIcon })
+        .addTo(toRaw(map.value))
+        .bindTooltip('Your Location', { direction: 'top' });
+    }
     
     // Update user marker location over time
     setInterval(async () => {
       try {
         await location.getUserLocation();
         const { latitude, longitude } = location.userLocation;
-        toRaw(userMarker.value).slideTo([latitude, longitude], {duration: 3000});
+        if (latitude && longitude && userMarker.value) {
+          toRaw(userMarker.value).slideTo([latitude, longitude], {duration: 3000});
+        }
       } catch (error) {
         console.error('Error getting user location update');
       }
