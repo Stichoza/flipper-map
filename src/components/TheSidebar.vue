@@ -93,7 +93,7 @@ const handleSelectPin = (pin) => {
         class="d-flex flex-column align-items-center justify-content-center py-5"
       >
         <div v-if="!flipper.isConnected">
-          <p class="text-muted small">
+          <p class="text-muted small text-center">
             Connect Flipper to see files.
           </p>
           <div class="mt-5 text-center">

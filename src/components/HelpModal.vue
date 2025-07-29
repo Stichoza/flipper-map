@@ -56,6 +56,11 @@ Preset: FuriHalSubGhzPresetOok270Async
 Protocol: Princeton
 ...</pre>
           </div>
+          <div class="mb-4">
+            <p>
+              <span class="fw-bold">Tip</span>: Check out <a href="https://github.com/Stichoza/flipper-nearby-files"><i class="fas fa-location-dot" /> <span class="fw-medium">Nearby Files</span></a> — a native Flipper application for viewing nearby files directly on your Flipper Zero without the need to connect it to your computer using USB cable.
+            </p>
+          </div>
         </div>
       </div>
     </div>
