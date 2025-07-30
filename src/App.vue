@@ -75,9 +75,9 @@ const handleSearch = (query) => {
 </script>
 
 <template>
-  <div class="app-container">
+  <div class="app-container w-100 h-100">
     <div class="row g-0 h-100">
-      <div class="col sidebar-col">
+      <div class="w-100 col-sm sidebar-col">
         <TheSidebar
           v-model:selected-pin="selectedPin"
           :pins="pins"
@@ -86,7 +86,7 @@ const handleSearch = (query) => {
           @select-pin="selectPin"
         />
       </div>
-      <div class="col map-col">
+      <div class="col-sm map-col">
         <TheMap
           v-model:selected-pin="selectedPin"
           :pins="pins"

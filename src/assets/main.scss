@@ -22,9 +22,12 @@ html, body {
     overflow: hidden;
 }
 
-.app-container {
-    height: 100%;
-    width: 100%;
+// bootstrap variable for sm and up
+@media (min-width: 720px) {
+    .sidebar-col {
+        width: 360px;
+        max-width: 360px;
+    }
 }
 
 .sidebar-col, .map-col {
@@ -134,15 +137,6 @@ body[data-bs-theme="dark"] .leaflet-popup .leaflet-popup-content-wrapper, body[d
 
 .pixel-font {
     font-family: 'Jersey 10', sans-serif;
-}
-
-.sidebar {
-    height: 100%;
-    width: 100%;
-}
-
-.sidebar-col {
-    max-width: 320px;
 }
 
 .color-subghz {

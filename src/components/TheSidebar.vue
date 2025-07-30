@@ -50,7 +50,7 @@ const handleSelectPin = (pin) => {
 </script>
 
 <template>
-  <div class="sidebar border-end d-flex flex-column">
+  <div class="sidebar border-end d-flex flex-column w-100 h-100">
     <div class="sidebar-header">
       <div class="bg-primary text-white p-3 d-flex justify-content-between align-items-center">
         <div class="d-flex align-items-center gap-2">
