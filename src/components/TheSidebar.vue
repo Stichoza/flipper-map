@@ -54,21 +54,28 @@ const handleSelectPin = (pin) => {
     <div class="sidebar-header">
       <div class="bg-primary text-white p-3 d-flex justify-content-between align-items-center">
         <div class="d-flex align-items-center gap-2">
-          <div class="d-flex align-items-center justify-content-center bg-white rounded-circle p-1 size-36">
-            <i class="fas fa-location-dot text-primary fs-5" />
+          <div class="d-flex align-items-center justify-content-center bg-white rounded-circle p-1 size-32">
+            <i class="fas fa-location-dot text-primary fs-6" />
           </div>
-          <h1 class="mb-0 h2 pixel-font">
+          <h1 class="mb-0 fs-3 pixel-font">
             Flipper Map
           </h1>
         </div>
-        <button
-          :disabled="flipper.isConnecting"
-          :class="['btn btn-sm d-flex align-items-center gap-1', flipper.isConnected ? 'btn-light' : 'btn-light']"
-          @click="handleFlipperConnection"
-        >
-          <i :class="['fas', flipper.isSyncing ? 'fa-sync fa-spin' : (flipper.isConnected ? 'fa-check' : (flipper.isConnecting ? 'fa-spinner fa-spin' : 'fa-plug'))]" />
-          <span>{{ flipper.isSyncing ? 'Syncing' : (flipper.isConnected ? 'Connected' : (flipper.isConnecting ? 'Connecting' : 'Connect')) }}</span>
-        </button>
+        <div class="d-flex align-items-center gap-2">
+          <button
+            :disabled="flipper.isConnecting"
+            class="btn btn-sm d-flex align-items-center gap-1 btn-light"
+            @click="handleFlipperConnection"
+          >
+            <i :class="['fas', flipper.isSyncing ? 'fa-sync fa-spin' : (flipper.isConnected ? 'fa-check' : (flipper.isConnecting ? 'fa-spinner fa-spin' : 'fa-plug'))]" />
+            <span>{{ flipper.isSyncing ? 'Syncing' : (flipper.isConnected ? 'Connected' : (flipper.isConnecting ? 'Connecting' : 'Connect')) }}</span>
+          </button>
+          <button
+            class="btn btn-sm btn-light"
+          >
+            <i class="fas fa-cog" />
+          </button>
+        </div>
       </div>
     </div>
 
