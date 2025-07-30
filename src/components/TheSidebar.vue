@@ -81,9 +81,17 @@ const handleSelectPin = (pin) => {
           v-model="searchInput"
           type="text"
           class="form-control ps-5"
-          :placeholder="`Search${flipper.fileList.length ? ' ' + flipper.fileList.length + ' pins' : ''}...`"
+          :placeholder="flipper.isSyncing ? `Importing file ${flipper.fileList.length} out of ${flipper.fileCount}` : `Search${flipper.fileList.length ? ' ' + flipper.fileList.length + ' pins' : ''}...`"
           @input="handleSearch"
         >
+      </div>
+      <div v-if="flipper.isSyncing">
+        <div class="progress mt-3">
+          <div
+            :style="{ width: flipper.fileList.length / (flipper.fileCount || 1) * 100 + '%' }"
+            class="progress-bar progress-bar-striped progress-bar-animated"
+          />
+        </div>
       </div>
     </div>
     

@@ -11,6 +11,7 @@ export const useFlipperStore = defineStore('flipper', () => {
   const isSyncing = ref(false);
   const connectionError = ref(null);
   const generalError = ref(null);
+  const fileCount = ref(0); // Needed for storing discovered files count before importing them
   const fileList = ref([]);
   const fileReadQueue = ref([]);
   const isProcessingFiles = ref(false);
@@ -98,7 +99,7 @@ export const useFlipperStore = defineStore('flipper', () => {
       isSyncing.value = true;
       isProcessingFiles.value = false;
       isProcessingDirectories.value = true;
-      
+      fileCount.value = 0;
       fileList.value = [];
       fileReadQueue.value = [];
 
@@ -148,6 +149,7 @@ export const useFlipperStore = defineStore('flipper', () => {
         if (filePath && !filePath.includes('/.') && !filePath.includes('/assets/')) {
           console.log(`Found file: ${filePath}`);
           fileReadQueue.value.push(filePath);
+          fileCount.value++;
         }
       }
     } else if (isSyncing.value && isProcessingFiles.value) {
@@ -289,6 +291,7 @@ export const useFlipperStore = defineStore('flipper', () => {
     isSyncing,
     connectionError,
     generalError,
+    fileCount,
     fileList,
     fileByHash,
     isProcessingFiles,
