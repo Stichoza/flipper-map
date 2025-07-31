@@ -92,12 +92,14 @@ const handleSelectPin = (pin) => {
           @input="handleSearch"
         >
       </div>
-      <div v-if="flipper.isSyncing">
-        <div class="progress mt-3">
-          <div
-            :style="{ width: flipper.fileList.length / (flipper.fileCount || 1) * 100 + '%' }"
-            class="progress-bar progress-bar-striped progress-bar-animated"
-          />
+      <div>
+        <div v-if="flipper.isSyncing">
+          <div class="progress mt-3">
+            <div
+              :style="{ width: flipper.fileList.length / (flipper.fileCount || 1) * 100 + '%' }"
+              class="progress-bar progress-bar-striped progress-bar-animated"
+            />
+          </div>
         </div>
       </div>
     </div>
