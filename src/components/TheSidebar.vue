@@ -72,6 +72,8 @@ const handleSelectPin = (pin) => {
           </button>
           <button
             class="btn btn-sm btn-light"
+            data-bs-toggle="modal"
+            data-bs-target="#settingsModal"
           >
             <i class="fas fa-cog" />
           </button>
@@ -114,14 +116,14 @@ const handleSelectPin = (pin) => {
             Connect Flipper to see files.
           </p>
           <div class="mt-5 text-center">
-            <a
-              href="#"
+            <button
+              type="button"
               class="btn btn-sm btn-link text-decoration-none"
               data-bs-toggle="modal"
               data-bs-target="#helpModal"
             >
               <i class="fas fa-question-circle" /> Help
-            </a>
+            </button>
           </div>
         </div>
         <p v-else-if="flipper.isSyncing">
