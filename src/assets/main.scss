@@ -1,4 +1,5 @@
 $primary: #ff8200;
+$font-family-base: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 
 @import 'bootstrap';
 @import 'toastify-js/src/toastify.css';
@@ -14,7 +15,6 @@ html, body {
 }
 
 #app {
-    font-family: Roboto, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     height: 100vh;
@@ -36,21 +36,26 @@ html, body {
 }
 
 .toastify {
-    font-family: 'Roboto', sans-serif;
+    font-family: var(--bs-body-font-family);
     font-size: 14px;
     background: $primary;
     border-radius: 30px;
     padding: 8px 25px;
+    .toast-close {
+        position: relative;
+        left: 10px;
+    }
 }
 
-.toastify .toast-close {
-    position: relative;
-    left: 10px;
+body[data-bs-theme="dark"] .leaflet-popup {
+    .leaflet-popup-content-wrapper, .leaflet-popup-tip {
+        background: var(--bs-body-bg);
+        color: var(--bs-body-color);
+    }
 }
 
-body[data-bs-theme="dark"] .leaflet-popup .leaflet-popup-content-wrapper, body[data-bs-theme="dark"] .leaflet-popup .leaflet-popup-tip {
-    background: var(--bs-body-bg);
-    color: var(--bs-body-color);
+.leaflet-popup .leaflet-popup-content-wrapper {
+    box-shadow: var(--bs-box-shadow) !important;
 }
 
 .leaflet-popup-content {
@@ -59,34 +64,36 @@ body[data-bs-theme="dark"] .leaflet-popup .leaflet-popup-content-wrapper, body[d
 
 .custom-popup {
     width: 280px;
-    font-family: Roboto, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif !important;
+    a {
+        color: var(--bs-body-color); // Override Leaflet's blue style
+    }
 }
 
 .user-location-marker {
     background: transparent;
 }
 
-.custom-map-marker > div {
-    transition: .1s ease transform;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100%;
-    width: 100%;
-    text-align: center;
-    color: #fff;
-    border: 2px solid #fff;
-    border-radius: 50%;
-    box-sizing: border-box;
-    cursor: pointer;
-}
-
-.custom-map-marker > div i {
-    font-size: 12px;
-}
-
-.custom-map-marker:hover > div {
-    transform: scale(1.25);
+.custom-map-marker {
+    & > div {
+        transition: .1s ease transform;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+        width: 100%;
+        text-align: center;
+        color: #fff;
+        border: 2px solid #fff;
+        border-radius: 50%;
+        box-sizing: border-box;
+        cursor: pointer;
+        i {
+            font-size: 12px;
+        }
+    }
+    &:hover > div {
+        transform: scale(1.25);
+    }
 }
 
 .pulse {
