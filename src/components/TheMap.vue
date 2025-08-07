@@ -265,7 +265,7 @@ const createMarker = file => {
         <pre class="mt-2 card p-2 bg-body-secondary" style="max-height: 210px">${cleanContent}</pre>
       </details>
       <div class="mt-2">
-        <button class="btn btn-sm btn-secondary w-100 d-flex align-items-center" onclick="jsLaunchFile('${file.hash}')" title="Flipper must be unlocked and apps should not be running">
+        <button class="btn btn-sm btn-secondary w-100 d-flex align-items-center" onclick="jsLaunchFile('${file.hash}')">
           <span class="flex-grow-1 ps-3">Open on Flipper</span>
           <i class="fas fa-square-arrow-up-right pull-right"></i></button>
       </div>
