@@ -8,6 +8,7 @@
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title">
+            <i class="fas fa-question-circle me-1" />
             How to use Flipper Map
           </h5>
           <button
