@@ -6,6 +6,7 @@ import HelpModal from '@/components/HelpModal.vue';
 import { useLocationStore } from '@/stores/location.js';
 import { useFlipperStore } from '@/stores/flipper';
 import { notify } from '@/helpers/notification.js';
+import SettingsModal from './components/SettingsModal.vue';
 
 const location = useLocationStore();
 const flipper = useFlipperStore();
@@ -96,4 +97,5 @@ const handleSearch = (query) => {
     </div>
   </div>
   <HelpModal />
+  <SettingsModal />
 </template>
