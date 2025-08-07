@@ -237,6 +237,17 @@ const createMarker = file => {
           <i class="fas fa-${icon} text-white"></i>
         </div>
         <h6 class="m-0 flex-grow-1 text-truncate">${file.name}</h6>
+        <div class="btn-group dropstart">
+          <button class="btn btn-link-secondary btn-sm border-0 px-2" data-bs-toggle="dropdown" data-bs-placement="left">
+            <i class="fas fa-ellipsis-v"></i>
+          </button>
+          <ul class="dropdown-menu shadow-sm">
+            <li><a class="dropdown-item small ps-2" href="#" onclick="jsLaunchFile('${file.hash}')"><i class="fas fa-fw mx-1 fa-square-arrow-up-right"></i> Open on Flipper</a></li>
+            <li><a class="dropdown-item small ps-2 disabled" href="#" onclick="jsRelocateFile('${file.hash}')"><i class="fas fa-fw mx-1 fa-location-dot"></i> Change Location</a></li>
+            <li><a class="dropdown-item small ps-2" href="#" onclick="jsRenameFile('${file.hash}')"><i class="fas fa-fw mx-1 fa-pen-to-square"></i> Rename</a></li>
+            <li><a class="dropdown-item small ps-2" href="#" onclick="jsDeleteFile('${file.hash}')"><i class="fas fa-fw mx-1 fa-trash-can"></i> Delete</a></li>
+          </ul>
+        </div>
       </div>
       <div>
         <div class="mb-1"><strong>Type:</strong> ${type}</div>
