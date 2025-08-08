@@ -9,6 +9,8 @@ export const useFlipperStore = defineStore('flipper', () => {
   const isConnected = ref(false);
   const isConnecting = ref(false);
   const isSyncing = ref(false);
+  const isRenaming = ref(false);
+  const renameFailed = ref(false);
   const connectionError = ref(null);
   const generalError = ref(null);
   const fileCount = ref(0); // Needed for storing discovered files count before importing them
@@ -180,6 +182,12 @@ export const useFlipperStore = defineStore('flipper', () => {
       if (line.toLowerCase().startsWith('raw:')) {
         currentFile.value.key = 'RAW';
       }
+    } else if (isRenaming.value) {
+      if (line.toLowerCase().startsWith('storage error:')) {
+        renameFailed.value = true;
+        generalError.value = line.split(':').pop().trim();
+        setTimeout(() => generalError.value = null, 50);
+      }
     }
 
     if (line.toLowerCase().startsWith('loader is locked')) {
@@ -271,6 +279,42 @@ export const useFlipperStore = defineStore('flipper', () => {
     await new Promise(resolve => setTimeout(resolve, 500));
   }
 
+  const renameFile = async (file, newName) => {
+    if (!writer.value || !isConnected.value || isRenaming.value || isSyncing.value) {
+      return false;
+    }
+
+    isRenaming.value = true;
+
+    console.log(`Renaming file: ${file.path}`);
+
+    const oldHash = file.hash;
+    const newPath = file.pathOnly + newName + '.' + file.extension;
+    
+    await writer.value.write(`storage rename "${file.path}" "${newPath}"\r\n`);
+    await new Promise(resolve => setTimeout(resolve, 500));
+    
+    isRenaming.value = false;
+
+    if (renameFailed.value) {
+      renameFailed.value = false;
+      return false;
+    }
+
+    renameFailed.value = false;
+
+    fileList.value = fileList.value.filter(file => file.hash !== oldHash); // Remove old file
+    fileList.value.push({ // Push new one
+        ...file,
+        hash: SHA256(newPath).toString(),
+        name: newName,
+        path: newPath,
+        pathOnly: newPath.substring(0, newPath.lastIndexOf('/') + 1),
+      });
+
+    return true;
+  }
+
   const getFileIcon = (type) => {
     switch (type) {
       case 'subghz':
@@ -291,6 +335,7 @@ export const useFlipperStore = defineStore('flipper', () => {
     isConnected,
     isConnecting,
     isSyncing,
+    isRenaming,
     connectionError,
     generalError,
     fileCount,
@@ -304,6 +349,7 @@ export const useFlipperStore = defineStore('flipper', () => {
     connect,
     disconnect,
     syncFiles,
-    launchFile
+    launchFile,
+    renameFile,
   };
 });

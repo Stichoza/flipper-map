@@ -305,6 +305,32 @@ window.jsLaunchFile = (hash) => {
   }
 }
 
+window.jsRenameFile = (hash) => {
+  const file = flipper.fileByHash(hash);
+
+  if (flipper.isSyncing) {
+    notify('Please wait until sync is complete', 'warning');
+  } else if (!flipper.isConnected) {
+    notify('Please connect your Flipper', 'error');
+  } else if (file) {
+    const newName = prompt(`Enter new name\nPath: ${file.path}\nExtension: ${file.extension}\nPath only: ${file.pathOnly}`, file.name);
+    if (newName) {
+      flipper.renameFile(file, newName);
+    }
+  }
+}
+
+window.jsDeleteFile = (hash) => {
+  if (flipper.isSyncing) {
+    notify('Please wait until sync is complete', 'warning');
+  } else if (!flipper.isConnected) {
+    notify('Please connect your Flipper', 'error');
+  } else if (confirm('Are you sure you want to delete this file?')) {
+    const file = flipper.fileByHash(hash);
+    flipper.deleteFile(file);
+  }
+}
+
 watch(() => props.pins, () => {
   if (map.value) {
     addMarkers();
