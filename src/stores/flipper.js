@@ -307,8 +307,6 @@ export const useFlipperStore = defineStore('flipper', () => {
       return false;
     }
 
-    renameFailed.value = false;
-
     fileList.value = fileList.value.filter(f => f.hash !== oldHash); // Remove old file
     fileList.value.push({ // Push new one
         ...file,
@@ -337,8 +335,6 @@ export const useFlipperStore = defineStore('flipper', () => {
       deleteFailed.value = false;
       return false;
     }
-
-    deleteFailed.value = false;
     
     fileList.value = fileList.value.filter(f => f.hash !== file.hash);
     
