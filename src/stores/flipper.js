@@ -11,6 +11,8 @@ export const useFlipperStore = defineStore('flipper', () => {
   const isSyncing = ref(false);
   const isRenaming = ref(false);
   const renameFailed = ref(false);
+  const isDeleting = ref(false);
+  const deleteFailed = ref(false);
   const connectionError = ref(null);
   const generalError = ref(null);
   const fileCount = ref(0); // Needed for storing discovered files count before importing them
@@ -182,11 +184,15 @@ export const useFlipperStore = defineStore('flipper', () => {
       if (line.toLowerCase().startsWith('raw:')) {
         currentFile.value.key = 'RAW';
       }
-    } else if (isRenaming.value) {
+    } else if (isRenaming.value || isDeleting.value) {
       if (line.toLowerCase().startsWith('storage error:')) {
-        renameFailed.value = true;
         generalError.value = line.split(':').pop().trim();
         setTimeout(() => generalError.value = null, 50);
+        if (isRenaming.value) {
+          renameFailed.value = true;
+        } else if (isDeleting.value) {
+          deleteFailed.value = true;
+        }
       }
     }
 
@@ -280,7 +286,7 @@ export const useFlipperStore = defineStore('flipper', () => {
   }
 
   const renameFile = async (file, newName) => {
-    if (!writer.value || !isConnected.value || isRenaming.value || isSyncing.value) {
+    if (!writer.value || !isConnected.value || isRenaming.value || isDeleting.value || isSyncing.value) {
       return false;
     }
 
@@ -303,7 +309,7 @@ export const useFlipperStore = defineStore('flipper', () => {
 
     renameFailed.value = false;
 
-    fileList.value = fileList.value.filter(file => file.hash !== oldHash); // Remove old file
+    fileList.value = fileList.value.filter(f => f.hash !== oldHash); // Remove old file
     fileList.value.push({ // Push new one
         ...file,
         hash: SHA256(newPath).toString(),
@@ -312,6 +318,30 @@ export const useFlipperStore = defineStore('flipper', () => {
         pathOnly: newPath.substring(0, newPath.lastIndexOf('/') + 1),
       });
 
+    return true;
+  }
+
+  const deleteFile = async (file) => {
+    if (!writer.value || !isConnected.value || isRenaming.value || isDeleting.value || isSyncing.value) {
+      return false;
+    }
+
+    console.log(`Deleting file: ${file.path}`);
+    
+    await writer.value.write(`storage remove "${file.path}"\r\n`);
+    await new Promise(resolve => setTimeout(resolve, 500));
+
+    isDeleting.value = false;
+
+    if (deleteFailed.value) {
+      deleteFailed.value = false;
+      return false;
+    }
+
+    deleteFailed.value = false;
+    
+    fileList.value = fileList.value.filter(f => f.hash !== file.hash);
+    
     return true;
   }
 
@@ -336,6 +366,7 @@ export const useFlipperStore = defineStore('flipper', () => {
     isConnecting,
     isSyncing,
     isRenaming,
+    isDeleting,
     connectionError,
     generalError,
     fileCount,
@@ -351,5 +382,6 @@ export const useFlipperStore = defineStore('flipper', () => {
     syncFiles,
     launchFile,
     renameFile,
+    deleteFile,
   };
 });
