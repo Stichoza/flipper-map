@@ -286,10 +286,21 @@ const createMarker = file => {
 
 const addMarkers = () => {
   const existingPins = Object.keys(markers.value);
+  const addedPinHashes = []; // To diff orphaned markers
   
   props.pins.forEach(file => {
     if (!existingPins.includes(file.hash) && file.latitude && file.longitude) {
       markers.value[file.hash] = createMarker(file).addTo(toRaw(clusters.value));
+    }
+    addedPinHashes.push(file.hash);
+  });
+
+  // TODO: Optimize the removal of orphaned markers
+  existingPins.forEach(hash => {
+    if (!addedPinHashes.includes(hash)) {
+      console.log('Removing pin from map: ' + hash);
+      toRaw(clusters.value).removeLayer(markers.value[hash]);
+      delete markers.value[hash];
     }
   });
 }
