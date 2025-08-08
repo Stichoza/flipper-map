@@ -316,7 +316,7 @@ window.jsLaunchFile = (hash) => {
   }
 }
 
-window.jsRenameFile = (hash) => {
+window.jsRenameFile = async (hash) => {
   const file = flipper.fileByHash(hash);
 
   if (flipper.isSyncing) {
@@ -325,20 +325,22 @@ window.jsRenameFile = (hash) => {
     notify('Please connect your Flipper', 'error');
   } else if (file) {
     const newName = prompt(`Enter new name\nPath: ${file.path}\nExtension: ${file.extension}\nPath only: ${file.pathOnly}`, file.name);
-    if (newName) {
-      flipper.renameFile(file, newName);
+    if (newName && await flipper.renameFile(file, newName)) {
+      notify('File renamed successfully', 'success');
     }
   }
 }
 
-window.jsDeleteFile = (hash) => {
+window.jsDeleteFile = async (hash) => {
   if (flipper.isSyncing) {
     notify('Please wait until sync is complete', 'warning');
   } else if (!flipper.isConnected) {
     notify('Please connect your Flipper', 'error');
   } else if (confirm('Are you sure you want to delete this file?')) {
     const file = flipper.fileByHash(hash);
-    flipper.deleteFile(file);
+    if (await flipper.deleteFile(file)) {
+      notify('File deleted successfully', 'success');
+    }
   }
 }
 
