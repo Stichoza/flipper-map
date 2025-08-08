@@ -119,6 +119,8 @@ export const useFlipperStore = defineStore('flipper', () => {
           hash: SHA256(file).toString(),
           name: file.split('/').pop().split('.').shift(),
           path: file,
+          pathOnly: file.substring(0, file.lastIndexOf('/') + 1),
+          extension: file.split('.').pop(),
           type: {sub: 'subghz', nfc: 'nfc', rfid: 'rfid'}[file.split('.').pop()],
           content: '',
           latitude: null,
