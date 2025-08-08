@@ -209,15 +209,6 @@ const clearMarkers = () => {
 
 const createMarker = file => {
   const icon = flipper.getFileIcon(file.type);
-  const cleanContent = file.content.replace(/^(>|size:).*$/gmi, '').trim();
-  const key = file.key.replace(/00\s/g, '');
-  const frequency = file.content.match(/frequency:\s*(\d+)/i)?.[1];
-  const protocol = file.content.match(/protocol:\s*(.+)/i)?.[1];
-  const bit = file.content.match(/bit:\s*(.+)/i)?.[1];
-  const uid = file.content.match(/uid:\s*(.+)/i)?.[1];
-  const keyType = file.content.match(/key type:\s*(.+)/i)?.[1];
-  const data = file.content.match(/data:\s*(.+)/i)?.[1]; // Show only with keyType (RFID), otherwise it will display RAW SubGHz data
-  const type = {subghz: 'Sub-GHz', nfc: 'NFC', rfid: 'RFID'}[file.type] ?? file.type;
   const isUnknown = file.name.startsWith('_'); // For my personal use case ¯\_(ツ)_/¯
   
   return L.marker([file.latitude, file.longitude], {
@@ -231,45 +222,7 @@ const createMarker = file => {
       popupAnchor: [0, -14],
     }),
   })
-  .bindPopup(`<div class="custom-popup">
-      <div class="d-flex align-items-center gap-2 mb-2 pb-2 border-bottom">
-        <div class="flex-shrink-0 rounded-circle d-flex justify-content-center align-items-center bg-${file.type} size-24">
-          <i class="fas fa-${icon} text-white"></i>
-        </div>
-        <h6 class="m-0 flex-grow-1 text-truncate">${file.name}</h6>
-        <div class="btn-group dropstart">
-          <button class="btn btn-link-secondary btn-sm border-0 px-2" data-bs-toggle="dropdown" data-bs-placement="left">
-            <i class="fas fa-ellipsis-v"></i>
-          </button>
-          <ul class="dropdown-menu shadow-sm">
-            <li><a class="dropdown-item small ps-2" href="#" onclick="jsLaunchFile('${file.hash}')"><i class="fas fa-fw mx-1 fa-square-arrow-up-right"></i> Open on Flipper</a></li>
-            <li><a class="dropdown-item small ps-2 disabled" href="#" onclick="jsRelocateFile('${file.hash}')"><i class="fas fa-fw mx-1 fa-location-dot"></i> Change Location</a></li>
-            <li><a class="dropdown-item small ps-2" href="#" onclick="jsRenameFile('${file.hash}')"><i class="fas fa-fw mx-1 fa-pen-to-square"></i> Rename</a></li>
-            <li><a class="dropdown-item small ps-2" href="#" onclick="jsDeleteFile('${file.hash}')"><i class="fas fa-fw mx-1 fa-trash-can"></i> Delete</a></li>
-          </ul>
-        </div>
-      </div>
-      <div>
-        <div class="mb-1"><strong>Type:</strong> ${type}</div>
-        ${frequency ? `<div class="mb-1"><strong>Frequency:</strong> ${frequency/1000000} MHz</div>` : ''}
-        ${protocol ? `<div class="mb-1"><strong>Protocol:</strong> ${protocol} ${bit ? `(${bit} bit)` : ''}</div>` : ''}
-        ${key ? `<div class="mb-1"><strong>Key:</strong> ${key}</div>` : ''}
-        ${uid ? `<div class="mb-1"><strong>UID:</strong> ${uid}</div>` : ''}
-        ${keyType ? `<div class="mb-1"><strong>Key Type:</strong> ${keyType}</div>` : ''}
-        ${keyType && data ? `<div class="mb-1"><strong>Data:</strong> ${data}</div>` : ''}
-        <div class="mb-1"><strong>Distance:</strong> <span class="popup-distance-text">${file.distanceText}</span></div>
-        <div class="mb-1"><strong>Path:</strong> ${file.path}</div>
-      </div>
-      <details>
-        <summary><strong>File content</strong></summary>
-        <pre class="mt-2 card p-2 bg-body-secondary" style="max-height: 210px">${cleanContent}</pre>
-      </details>
-      <div class="mt-2">
-        <button class="btn btn-sm btn-secondary w-100 d-flex align-items-center" onclick="jsLaunchFile('${file.hash}')">
-          <span class="flex-grow-1 ps-3">Open on Flipper</span>
-          <i class="fas fa-square-arrow-up-right pull-right"></i></button>
-      </div>
-    </div>`, {
+  .bindPopup(createPopup(file), {
     closeButton: false,
     autoPanPadding: [60, 20],
     customHash: file.hash // Used for dynamically updating distance in popup content
@@ -282,6 +235,60 @@ const createMarker = file => {
       popup.getElement().querySelector('.popup-distance-text').textContent = distanceText;
     }
   })
+}
+
+const createPopup = file => {
+  const icon = flipper.getFileIcon(file.type);
+  const cleanContent = file.content.replace(/^(>|size:).*$/gmi, '').trim();
+  const key = file.key.replace(/00\s/g, '');
+  const frequency = file.content.match(/frequency:\s*(\d+)/i)?.[1];
+  const protocol = file.content.match(/protocol:\s*(.+)/i)?.[1];
+  const bit = file.content.match(/bit:\s*(.+)/i)?.[1];
+  const uid = file.content.match(/uid:\s*(.+)/i)?.[1];
+  const keyType = file.content.match(/key type:\s*(.+)/i)?.[1];
+  const data = file.content.match(/data:\s*(.+)/i)?.[1]; // Show only with keyType (RFID), otherwise it will display RAW SubGHz data
+  const type = {subghz: 'Sub-GHz', nfc: 'NFC', rfid: 'RFID'}[file.type] ?? file.type;
+  const openVerb = file.type === 'subghz' ? 'Open on Flipper' : 'Emulate on Flipper';
+
+  return `<div class="custom-popup">
+    <div class="d-flex align-items-center gap-2 mb-2 pb-2 border-bottom">
+      <div class="flex-shrink-0 rounded-circle d-flex justify-content-center align-items-center bg-${file.type} size-24">
+        <i class="fas fa-${icon} text-white"></i>
+      </div>
+      <h6 class="m-0 flex-grow-1 text-truncate">${file.name}</h6>
+      <div class="btn-group dropstart">
+        <button class="btn btn-link-secondary btn-sm border-0 px-2" data-bs-toggle="dropdown" data-bs-placement="left">
+          <i class="fas fa-ellipsis-v"></i>
+        </button>
+        <ul class="dropdown-menu shadow-sm">
+          <li><a class="dropdown-item small ps-2" href="#" onclick="jsLaunchFile('${file.hash}')"><i class="fas fa-fw mx-1 fa-square-arrow-up-right"></i> ${openVerb}</a></li>
+          <li><a class="dropdown-item small ps-2 disabled" href="#" onclick="jsRelocateFile('${file.hash}')"><i class="fas fa-fw mx-1 fa-arrows-up-down-left-right"></i> Move Pin</a></li>
+          <li><a class="dropdown-item small ps-2" href="#" onclick="jsRenameFile('${file.hash}')"><i class="fas fa-fw mx-1 fa-pen-to-square"></i> Rename</a></li>
+          <li><a class="dropdown-item small ps-2" href="#" onclick="jsDeleteFile('${file.hash}')"><i class="fas fa-fw mx-1 fa-trash-can"></i> Delete</a></li>
+        </ul>
+      </div>
+    </div>
+    <div>
+      <div class="mb-1"><strong>Type:</strong> ${type}</div>
+      ${frequency ? `<div class="mb-1"><strong>Frequency:</strong> ${frequency/1000000} MHz</div>` : ''}
+      ${protocol ? `<div class="mb-1"><strong>Protocol:</strong> ${protocol} ${bit ? `(${bit} bit)` : ''}</div>` : ''}
+      ${key ? `<div class="mb-1"><strong>Key:</strong> ${key}</div>` : ''}
+      ${uid ? `<div class="mb-1"><strong>UID:</strong> ${uid}</div>` : ''}
+      ${keyType ? `<div class="mb-1"><strong>Key Type:</strong> ${keyType}</div>` : ''}
+      ${keyType && data ? `<div class="mb-1"><strong>Data:</strong> ${data}</div>` : ''}
+      <div class="mb-1"><strong>Distance:</strong> <span class="popup-distance-text">${file.distanceText}</span></div>
+      <div class="mb-1"><strong>Path:</strong> ${file.path}</div>
+    </div>
+    <details>
+      <summary><strong>File content</strong></summary>
+      <pre class="mt-2 card p-2 bg-body-secondary" style="max-height: 210px">${cleanContent}</pre>
+    </details>
+    <div class="mt-2">
+      <button class="btn btn-sm btn-secondary w-100 d-flex align-items-center" onclick="jsLaunchFile('${file.hash}')">
+        <span class="flex-grow-1 ps-3">${openVerb}</span>
+        <i class="fas fa-square-arrow-up-right pull-right"></i></button>
+    </div>
+  </div>`;
 }
 
 const addMarkers = () => {
