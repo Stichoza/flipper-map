@@ -297,7 +297,11 @@ const addMarkers = () => {
   
   props.pins.forEach(file => {
     if (!existingPins.includes(file.hash) && file.latitude && file.longitude) {
-      markers.value[file.hash] = createMarker(file).addTo(toRaw(clusters.value));
+      try {
+        markers.value[file.hash] = createMarker(file).addTo(toRaw(clusters.value));
+      } catch (error) {
+        notify('Failed to add marker for ' + file.name, 'error');
+      }
     }
     addedPinHashes.push(file.hash);
   });
@@ -305,8 +309,7 @@ const addMarkers = () => {
   // TODO: Optimize the removal of orphaned markers
   existingPins.forEach(hash => {
     if (!addedPinHashes.includes(hash)) {
-      console.log('Removing pin from map: ' + hash);
-      toRaw(clusters.value).removeLayer(markers.value[hash]);
+      toRaw(clusters.value).removeLayer(toRaw(markers.value)[hash]);
       delete markers.value[hash];
     }
   });
