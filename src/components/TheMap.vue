@@ -331,9 +331,17 @@ window.jsRenameFile = async (hash) => {
   } else if (!flipper.isConnected) {
     notify('Please connect your Flipper', 'error');
   } else if (file) {
-    const newName = prompt(`Enter new name\nPath: ${file.path}\nExtension: ${file.extension}\nPath only: ${file.pathOnly}`, file.name);
-    if (newName && await flipper.renameFile(file, newName)) {
+    const newName = prompt('Enter new name', file.name);
+
+    if (!newName) {
+      notify('File name cannot be empty', 'warning');
+      return;
+    }
+
+    if (await flipper.renameFile(file, newName)) {
       notify('File renamed successfully', 'success');
+    } else {
+      notify('Failed to rename file', 'error');
     }
   }
 }
