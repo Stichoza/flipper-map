@@ -257,6 +257,7 @@ const createPopup = file => {
   const data = file.content.match(/data:\s*(.+)/i)?.[1]; // Show only with keyType (RFID), otherwise it will display RAW SubGHz data
   const type = {subghz: 'Sub-GHz', nfc: 'NFC', rfid: 'RFID'}[file.type] ?? file.type;
   const openVerb = file.type === 'subghz' ? 'Open on Flipper' : 'Emulate on Flipper';
+  const hasLocation = file.latitude && file.longitude;
 
   return `<div class="custom-popup">
     <div class="d-flex align-items-center gap-2 mb-2 pb-2 border-bottom">
@@ -270,7 +271,7 @@ const createPopup = file => {
         </button>
         <ul class="dropdown-menu shadow-sm">
           <li><a class="dropdown-item small ps-2" href="#" onclick="jsLaunchFile('${file.hash}')"><i class="fas fa-fw mx-1 fa-square-arrow-up-right"></i> ${openVerb}</a></li>
-          <li><a class="dropdown-item small ps-2 disabled" href="#" onclick="jsRelocateFile('${file.hash}')"><i class="fas fa-fw mx-1 fa-arrows-up-down-left-right"></i> Move Pin</a></li>
+          <li><a class="dropdown-item small ps-2 disabled" href="#" onclick="jsRelocateFile('${file.hash}')"><i class="fas fa-fw mx-1 ${hasLocation ? 'fa-arrows-up-down-left-right' : 'fa-location-dot'}"></i> ${hasLocation ? 'Move Pin' : 'Set Location'}</a></li>
           <li><a class="dropdown-item small ps-2" href="#" onclick="jsRenameFile('${file.hash}')"><i class="fas fa-fw mx-1 fa-pen-to-square"></i> Rename</a></li>
           <li><a class="dropdown-item small ps-2" href="#" onclick="jsDeleteFile('${file.hash}')"><i class="fas fa-fw mx-1 fa-trash-can"></i> Delete</a></li>
         </ul>
