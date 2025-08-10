@@ -239,7 +239,7 @@ const createMarker = file => {
 
 const createPopup = file => {
   const icon = flipper.getFileIcon(file.type);
-  const cleanContent = file.content.replace(/^(>|size:).*$/gmi, '').trim();
+  const cleanContent = file.content.trim();
   const key = file.key.replace(/00\s/g, '');
   const frequency = file.content.match(/frequency:\s*(\d+)/i)?.[1];
   const protocol = file.content.match(/protocol:\s*(.+)/i)?.[1];

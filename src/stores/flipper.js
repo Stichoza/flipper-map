@@ -147,6 +147,10 @@ export const useFlipperStore = defineStore('flipper', () => {
   };
 
   const processLine = (line) => {
+    if (line.startsWith('>: ')) {
+      return; // Skip command line
+    }
+
     if (isSyncing.value && isProcessingDirectories.value) {
       const matches = line.match(/\[\F\]\s+(\/ext\/(subghz|nfc|lfrfid)\/[A-Za-z0-9_,\+\-\s\./\(\)]+\.(sub|nfc|rfid))\s\d+b/m)
 
@@ -159,6 +163,11 @@ export const useFlipperStore = defineStore('flipper', () => {
         }
       }
     } else if (isSyncing.value && isProcessingFiles.value) {
+
+      if (line.toLowerCase().startsWith('size:')) {
+        return; // Skip size line added when reading file
+      }
+
       currentFile.value.content += line + '\n';
 
       if (
