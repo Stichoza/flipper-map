@@ -33,6 +33,9 @@ export const useFlipperStore = defineStore('flipper', () => {
     key: '',
   });
 
+  const directoryScanTimeout = 1000;
+  const fileScanTimeout = 500;
+
   const directories = [
     '/ext/subghz',
     '/ext/nfc',
@@ -110,7 +113,7 @@ export const useFlipperStore = defineStore('flipper', () => {
       for (const directory of directories) {
         console.log(`Processing ${directory}`);
         await writer.value.write(`storage tree "${directory.replace(/\/\/+/g, '/')}"\r\n`);
-        await new Promise(resolve => setTimeout(resolve, 500));
+        await new Promise(resolve => setTimeout(resolve, directoryScanTimeout));
       }
 
       isProcessingDirectories.value = false;
@@ -132,7 +135,7 @@ export const useFlipperStore = defineStore('flipper', () => {
           key: '',
         };
         await writer.value.write(`storage read "${file.replace(/\/\/+/g, '/')}"\r\n`);
-        await new Promise(resolve => setTimeout(resolve, 200));
+        await new Promise(resolve => setTimeout(resolve, fileScanTimeout));
 
         fileList.value.push(currentFile.value);
       }
