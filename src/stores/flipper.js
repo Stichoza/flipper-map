@@ -311,7 +311,7 @@ export const useFlipperStore = defineStore('flipper', () => {
     fileList.value.push({ // Push new one
         ...file,
         hash: SHA256(newPath).toString(),
-        name: newName,
+        name: newName.split('/').pop(),
         path: newPath,
         pathOnly: newPath.substring(0, newPath.lastIndexOf('/') + 1),
       });
