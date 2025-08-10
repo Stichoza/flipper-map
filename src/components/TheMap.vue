@@ -3,6 +3,7 @@ import { onMounted, onUnmounted, ref, toRaw, watch } from 'vue';
 import { useLocationStore } from '@/stores/location.js';
 import { useFlipperStore } from '@/stores/flipper.js';
 import { notify } from '@/helpers/notification';
+import { Modal } from 'bootstrap';
 import L from 'leaflet';
 import 'leaflet-easybutton';
 import 'leaflet.marker.slideto';
@@ -191,10 +192,17 @@ onMounted(async () => {
   
   watch(() => props.selectedPin, () => {
     if (props.selectedPin) {
-      toRaw(map.value).flyTo([props.selectedPin.latitude, props.selectedPin.longitude], defaultZoom, {duration: 0.5}); // Limit duration to make sure popup is able to open
-      setTimeout(() => {
-        toRaw(markers.value[props.selectedPin.hash]).openPopup();
-      }, 1000);
+      if (props.selectedPin.latitude && props.selectedPin.longitude) {
+        toRaw(map.value).flyTo([props.selectedPin.latitude, props.selectedPin.longitude], defaultZoom, {duration: 0.5}); // Limit duration to make sure popup is able to open
+        setTimeout(() => {
+          toRaw(markers.value[props.selectedPin.hash]).openPopup();
+        }, 1000);
+      } else {
+        const content = createPopup(props.selectedPin);
+        const modal = new Modal('#nonGeolocatedPinModal');
+        document.querySelector('#nonGeolocatedPinModal .modal-body').innerHTML = content;
+        modal.show();
+      }
     }
   });
   
