@@ -96,6 +96,14 @@ body[data-bs-theme="dark"] .leaflet-popup {
     }
 }
 
+.non-geolocated-pin-modal {
+  font-size: 0.8rem;
+  line-height: 1.3;
+  .modal-dialog {
+    width: 315px;
+  }
+}
+
 .pulse {
     width: 20px;
     height: 20px;
