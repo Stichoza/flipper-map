@@ -167,6 +167,10 @@ const handleSelectPin = (pin) => {
                     <i class="fas fa-location-pin-lock me-1 small flex-shrink-0" />
                     <span class="text-truncate">No location</span>
                   </div>
+                  <div v-if="pin.hasDuplicates">
+                    <i class="fas fa-exclamation-triangle me-1 ms-2 small flex-shrink-0 text-danger" />
+                    <span class="text-truncate text-danger">Duplicate</span>
+                  </div>
                 </div>
               </div>
               <div class="flex-shrink-0">

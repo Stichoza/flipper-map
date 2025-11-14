@@ -61,7 +61,9 @@ const pins = computed(() => {
       }
     }
 
-    return {...file, distance, distanceText, visible}
+    const hasDuplicates = flipper.fileList.some(pin => pin.key && pin.key === file.key && pin !== file);
+
+    return {...file, distance, distanceText, visible, hasDuplicates}
   })
 
   return flipperPins.sort((a, b) => (a.distance || Infinity) - (b.distance || Infinity))

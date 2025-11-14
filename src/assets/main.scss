@@ -69,6 +69,15 @@ body[data-bs-theme="dark"] .leaflet-popup {
     }
 }
 
+.duplicate-pin {
+    border: 2px solid yellow !important;
+}
+
+.unknown-pin {
+    background-color: gray !important;
+    opacity: .75;
+}
+
 .user-location-marker {
     background: transparent;
 }

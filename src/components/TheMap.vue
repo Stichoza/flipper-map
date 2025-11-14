@@ -224,7 +224,7 @@ const createMarker = file => {
     riseOnHover: true,
     icon: L.divIcon({
       className: 'custom-map-marker',
-      html: `<div class="bg-${file.type}${isUnknown ? ' opacity-75' : ''}"><i class="fas fa-${icon}"></i></div>`,
+      html: `<div class="bg-${file.type}${isUnknown ? ' unknown-pin' : ''}${file.hasDuplicates ? ' duplicate-pin' : ''}"><i class="fas fa-${icon}"></i></div>`,
       iconSize: [28, 28],
       iconAnchor: [14, 14],
       popupAnchor: [0, -14],
