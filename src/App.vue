@@ -48,7 +48,7 @@ const pins = computed(() => {
   const flipperPins = flipper.fileList.map(file => {
     const hasCoordinates = file.latitude !== undefined && file.longitude !== undefined && file.latitude !== null && file.longitude !== null;
     const distance = hasCoordinates && latitude && longitude ? location.calculateDistance(latitude, longitude, file.latitude, file.longitude) : null;
-    const visible = file.name.toLowerCase().includes(searchQuery.value.toLowerCase());
+    const visible = file.name.toLowerCase().includes(searchQuery.value.toLowerCase()) || file.key.toLowerCase().replaceAll(' ', '').includes(searchQuery.value.toLowerCase().replaceAll(' ', ''));
     
     let distanceText = 'Unknown';
     if (distance !== undefined && distance !== null && !isNaN(distance)) {
