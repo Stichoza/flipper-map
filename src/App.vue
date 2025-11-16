@@ -61,8 +61,8 @@ const pins = computed(() => {
       }
     }
     
-    const duplicates = flipper.duplicates[file.key];
-    const similars = flipper.similars[file.keyPrefix];
+    const duplicates = flipper.duplicates[file.key] || [];
+    const similars = flipper.similars[file.keyPrefix] || [];
     
     const hasDuplicates = duplicates?.length > 1;
     const hasSimilars = similars?.length > 1;
