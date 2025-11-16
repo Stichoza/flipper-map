@@ -31,7 +31,10 @@ export const useFlipperStore = defineStore('flipper', () => {
     latitude: 0,
     longitude: 0,
     key: '',
+    keyPrefix: '',
   });
+  const duplicates = ref({});
+  const similars = ref({});
 
   const directoryScanTimeout = 1000;
   const fileScanTimeout = 500;
@@ -133,6 +136,7 @@ export const useFlipperStore = defineStore('flipper', () => {
           latitude: null,
           longitude: null,
           key: '',
+          keyPrefix: '',
         };
         await writer.value.write(`storage read "${file.replace(/\/\/+/g, '/')}"\r\n`);
         await new Promise(resolve => setTimeout(resolve, fileScanTimeout));
@@ -190,7 +194,16 @@ export const useFlipperStore = defineStore('flipper', () => {
       }
 
       if (line.toLowerCase().startsWith('key:')) {
-        currentFile.value.key = line.split(':').pop().trim();
+        const key = line.split(':').pop().trim();
+        const keyPrefix = key.substring(0, key.length - 2);
+        currentFile.value.key = key;
+        currentFile.value.keyPrefix = keyPrefix;
+
+        duplicates.value[key] = duplicates.value[key] || [];
+        similars.value[keyPrefix] = similars.value[keyPrefix] || [];
+
+        duplicates.value[key].push(currentFile.value.hash);
+        similars.value[keyPrefix].push(currentFile.value.hash);
       }
 
       if (line.toLowerCase().startsWith('raw:')) {
@@ -380,6 +393,8 @@ export const useFlipperStore = defineStore('flipper', () => {
     fileCount,
     fileList,
     fileByHash,
+    duplicates,
+    similars,
     isProcessingFiles,
     isProcessingDirectories,
     hardwareName,

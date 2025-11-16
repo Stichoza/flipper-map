@@ -60,11 +60,14 @@ const pins = computed(() => {
         distanceText = `${distance.toFixed(0)}km`;
       }
     }
-
-    const hasDuplicates = flipper.fileList.some(pin => pin.key && pin.key === file.key && pin !== file);
-    const hasSimilars = flipper.fileList.some(pin => pin.key && pin.key.substring(0, pin.key.length - 2) === file.key.substring(0, file.key.length - 2) && pin.key !== file.key && pin !== file);
-
-    return {...file, distance, distanceText, visible, hasDuplicates, hasSimilars}
+    
+    const duplicates = flipper.duplicates[file.key];
+    const similars = flipper.similars[file.keyPrefix];
+    
+    const hasDuplicates = duplicates?.length > 1;
+    const hasSimilars = similars?.length > 1;
+    
+    return {...file, distance, distanceText, visible, duplicates, similars, hasDuplicates, hasSimilars}
   })
 
   return flipperPins.sort((a, b) => (a.distance || Infinity) - (b.distance || Infinity))
