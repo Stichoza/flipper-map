@@ -171,6 +171,10 @@ const handleSelectPin = (pin) => {
                     <i class="fas fa-exclamation-triangle me-1 ms-2 small flex-shrink-0 text-danger" />
                     <span class="text-truncate text-danger">Duplicate</span>
                   </div>
+                  <div v-if="pin.hasSimilars">
+                    <i class="fas fa-info-circle me-1 ms-2 small flex-shrink-0 text-info" />
+                    <span class="text-truncate text-info">Similar</span>
+                  </div>
                 </div>
               </div>
               <div class="flex-shrink-0">
