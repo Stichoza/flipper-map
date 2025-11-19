@@ -286,6 +286,7 @@ const createPopup = file => {
       ${keyType ? `<div class="mb-1"><strong>Key Type:</strong> ${keyType}</div>` : ''}
       ${keyType && data ? `<div class="mb-1"><strong>Data:</strong> ${data}</div>` : ''}
       <div class="mb-1"><strong>Distance:</strong> <span class="popup-distance-text">${file.distanceText}</span></div>
+      <div class="mb-1"><strong>Coordinates:</strong> ${file.latitude.toFixed(6)}, ${file.longitude.toFixed(6)}</div>
       <div class="mb-1"><strong>Path:</strong> ${file.path}</div>
     </div>
     <details>
