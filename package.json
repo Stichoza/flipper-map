@@ -15,6 +15,7 @@
     "leaflet-easybutton": "^2.4.0",
     "leaflet.marker.slideto": "^0.3.0",
     "leaflet.markercluster": "^1.5.3",
+    "leaflet.smooth_marker_bouncing": "^3.1.1",
     "pinia": "^3.0.3",
     "toastify-js": "^1.12.0",
     "vue": "^3.5.17"

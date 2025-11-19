@@ -8,6 +8,9 @@ import L from 'leaflet';
 import 'leaflet-easybutton';
 import 'leaflet.marker.slideto';
 import 'leaflet.markercluster';
+import SmoothMarkerBouncing from 'leaflet.smooth_marker_bouncing';
+
+SmoothMarkerBouncing(L);
 
 const props = defineProps({
   pins: {
@@ -31,6 +34,8 @@ const clusters = ref(null);
 const markers = ref({});
 const userMarker = ref(null);
 const defaultZoom = 17;
+const isMovingPin = ref(false);
+const movingPinHash = ref(null);
 
 const location = useLocationStore()
 const flipper = useFlipperStore()
@@ -271,7 +276,7 @@ const createPopup = file => {
         </button>
         <ul class="dropdown-menu shadow-sm">
           <li><a class="dropdown-item small ps-2" href="#" onclick="jsLaunchFile('${file.hash}')"><i class="fas fa-fw mx-1 fa-square-arrow-up-right"></i> ${openVerb}</a></li>
-          <li><a class="dropdown-item small ps-2 disabled" href="#" onclick="jsRelocateFile('${file.hash}')"><i class="fas fa-fw mx-1 ${hasLocation ? 'fa-arrows-up-down-left-right' : 'fa-location-dot'}"></i> ${hasLocation ? 'Move Pin' : 'Set Location'}</a></li>
+          <li><a class="dropdown-item small ps-2${hasLocation ? '' : ' disabled'}" href="#" onclick="jsRelocateFile('${file.hash}')"><i class="fas fa-fw mx-1 ${hasLocation ? 'fa-arrows-up-down-left-right' : 'fa-location-dot'}"></i> ${hasLocation ? 'Move Pin' : 'Set Location'}</a></li>
           <li><a class="dropdown-item small ps-2" href="#" onclick="jsRenameFile('${file.hash}')"><i class="fas fa-fw mx-1 fa-pen-to-square"></i> Rename</a></li>
           <li><a class="dropdown-item small ps-2" href="#" onclick="jsDeleteFile('${file.hash}')"><i class="fas fa-fw mx-1 fa-trash-can"></i> Delete</a></li>
         </ul>
@@ -372,6 +377,85 @@ window.jsDeleteFile = async (hash) => {
   }
 }
 
+window.jsRelocateFile = (hash) => {
+  const file = flipper.fileByHash(hash);
+  
+  if (!file || !file.latitude || !file.longitude) {
+    return; // Only handle geolocated pins
+  }
+  
+  // Cancel any existing move operation first
+  if (isMovingPin.value) {
+    cancelMovePin();
+  }
+  
+  // Enter move mode
+  isMovingPin.value = true;
+  movingPinHash.value = hash;
+  
+  // Close any open popups
+  toRaw(map.value).closePopup();
+  
+  // Center map to pin location
+  toRaw(map.value).flyTo([file.latitude, file.longitude], defaultZoom, { duration: 0.5 });
+  
+  // Wait for flyTo animation to complete, then start centering the marker
+  const marker = toRaw(markers.value[hash]);
+  if (marker) {
+    marker.bounce();
+    
+    setTimeout(() => {
+      // Keep marker centered as map moves
+      const updateMarkerPosition = () => {
+        const center = toRaw(map.value).getCenter();
+        marker.setLatLng(center);
+      };
+      
+      // Set initial position to center
+      updateMarkerPosition();
+      
+      toRaw(map.value).on('move', updateMarkerPosition);
+      
+      // Store the event handler so we can remove it later
+      marker._movePinHandler = updateMarkerPosition;
+    }, 500); // Match the flyTo duration
+  }
+}
+
+const cancelMovePin = () => {
+  isMovingPin.value = false;
+  
+  // Remove bouncing animation and restore marker
+  if (movingPinHash.value && markers.value[movingPinHash.value]) {
+    const marker = toRaw(markers.value[movingPinHash.value]);
+    const file = flipper.fileByHash(movingPinHash.value);
+    
+    marker.stopBouncing();
+    
+    // Remove move event listener
+    if (marker._movePinHandler) {
+      toRaw(map.value).off('move', marker._movePinHandler);
+      delete marker._movePinHandler;
+    }
+    
+    // Restore marker to original position
+    if (file && file.latitude && file.longitude) {
+      marker.setLatLng([file.latitude, file.longitude]);
+    }
+  }
+  
+  movingPinHash.value = null;
+}
+
+const savePinLocation = () => {
+  // TODO: Implement actual saving functionality later
+  notify('Pin location updated', 'success');
+  cancelMovePin();
+}
+
+window.jsCancelMovePin = cancelMovePin;
+window.jsSavePinLocation = savePinLocation;
+
 watch(() => props.pins, () => {
   if (map.value) {
     addMarkers();
@@ -386,8 +470,33 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div
-    id="map"
-    class="map-container w-100 h-100"
-  />
+  <div class="position-relative w-100 h-100">
+    <div
+      id="map"
+      class="map-container w-100 h-100"
+    />
+    
+    <!-- Move Pin Controls -->
+    <div
+      v-if="isMovingPin"
+      class="move-pin-controls position-absolute bottom-0 start-50 translate-middle-x mb-4"
+    >
+      <div class="d-flex gap-2">
+        <button
+          class="btn btn-success btn-sm shadow px-3"
+          @click="savePinLocation"
+        >
+          <i class="fas fa-check me-1" />
+          Update Pin Location
+        </button>
+        <button
+          class="btn btn-secondary btn-sm shadow px-3"
+          @click="cancelMovePin"
+        >
+          <i class="fas fa-times me-1" />
+          Cancel
+        </button>
+      </div>
+    </div>
+  </div>
 </template>

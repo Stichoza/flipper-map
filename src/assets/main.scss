@@ -210,3 +210,9 @@ body[data-bs-theme="dark"] .leaflet-popup {
     width: 46px;
     height: 46px;
 }
+
+// Move Pin Mode Styles
+.move-pin-controls {
+    z-index: 1000;
+    pointer-events: auto;
+}
