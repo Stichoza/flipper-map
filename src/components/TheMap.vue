@@ -246,6 +246,7 @@ const createMarker = file => {
     if (file) {
       const distanceText = file.distanceText;
       popup.getElement().querySelector('.popup-distance-text').textContent = distanceText;
+      popup.getElement().querySelector('.popup-coordinates-text').textContent = `${file.latitude.toFixed(6)}, ${file.longitude.toFixed(6)}`; // For moved pins
     }
   })
 }
@@ -291,7 +292,7 @@ const createPopup = file => {
       ${keyType ? `<div class="mb-1"><strong>Key Type:</strong> ${keyType}</div>` : ''}
       ${keyType && data ? `<div class="mb-1"><strong>Data:</strong> ${data}</div>` : ''}
       <div class="mb-1"><strong>Distance:</strong> <span class="popup-distance-text">${file.distanceText}</span></div>
-      ${file.latitude && file.longitude ? `<div class="mb-1"><strong>Coordinates:</strong> ${file.latitude.toFixed(6)}, ${file.longitude.toFixed(6)}</div>` : ''}
+      ${file.latitude && file.longitude ? `<div class="mb-1"><strong>Coordinates:</strong> <span class="popup-coordinates-text">${file.latitude.toFixed(6)}, ${file.longitude.toFixed(6)}</span></div>` : ''}
       <div class="mb-1"><strong>Path:</strong> ${file.path}</div>
     </div>
     <details>
@@ -448,9 +449,33 @@ const cancelMovePin = () => {
 }
 
 const savePinLocation = () => {
-  // TODO: Implement actual saving functionality later
-  notify('Pin location updated', 'success');
-  cancelMovePin();
+  if (movingPinHash.value && markers.value[movingPinHash.value]) {
+    const marker = toRaw(markers.value[movingPinHash.value]);
+    const file = flipper.fileByHash(movingPinHash.value);
+    const center = toRaw(map.value).getCenter();
+    
+    // Update the file object with new coordinates
+    if (file) {
+      file.latitude = center.lat;
+      file.longitude = center.lng;
+      
+      // Remove move event listener
+      if (marker._movePinHandler) {
+        toRaw(map.value).off('move', marker._movePinHandler);
+        delete marker._movePinHandler;
+      }
+      
+      // Keep marker at the new position
+      marker.setLatLng(center);
+      marker.stopBouncing();
+      
+      // TODO: Implement actual file saving to Flipper device later
+      notify('Pin location updated', 'success');
+    }
+  }
+  
+  isMovingPin.value = false;
+  movingPinHash.value = null;
 }
 
 window.jsCancelMovePin = cancelMovePin;
