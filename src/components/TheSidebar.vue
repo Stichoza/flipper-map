@@ -171,9 +171,9 @@ const handleSelectPin = (pin) => {
                     <i class="fas fa-exclamation-triangle me-1 ms-2 small flex-shrink-0 text-warning" />
                     <span class="text-truncate text-warning">{{ pin.duplicates.length -1 }} duplicate{{ pin.duplicates.length -1 === 1 ? '' : 's' }}</span>
                   </div>
-                  <div v-if="(pin.similars.length - pin.duplicates.length) > 1">
+                  <div v-if="pin.hasSimilars">
                     <i class="fas fa-info-circle me-1 ms-2 small flex-shrink-0 text-info" />
-                    <span class="text-truncate text-info">{{ pin.similars.length -1 }} similar{{ pin.similars.length -1 === 1 ? '' : 's' }}</span>
+                    <span class="text-truncate text-info">{{ pin.similars.length - pin.duplicates.length }} similar{{ pin.similars.length - pin.duplicates.length === 1 ? '' : 's' }}</span>
                   </div>
                 </div>
               </div>

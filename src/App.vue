@@ -64,8 +64,8 @@ const pins = computed(() => {
     const duplicates = flipper.duplicates[file.key] || [];
     const similars = flipper.similars[file.keyPrefix] || [];
     
-    const hasDuplicates = duplicates?.length > 1;
-    const hasSimilars = similars?.length > 1;
+    const hasDuplicates = duplicates.length > 1;
+    const hasSimilars = (similars.length - duplicates.length) > 0; // Zero because duplicates already includes self the current pin
     
     return {...file, distance, distanceText, visible, duplicates, similars, hasDuplicates, hasSimilars}
   })
