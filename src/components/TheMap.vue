@@ -184,18 +184,26 @@ onMounted(async () => {
   L.easyButton({
     position: 'topleft',
     states: [
-    {
-      stateName: 'clustering-button',
-      title: 'Toggle clustering',
-      icon: 'fa-circle-nodes fa-lg',
-      onClick: async () => {
-        if (clusteringEnabled.value = !clusteringEnabled.value) {
-          toRaw(clusters.value).enableClustering();
-        } else {
+      {
+        stateName: 'clustering-enabled',
+        title: 'Disable clustering',
+        icon: 'fa-circle-nodes fa-lg',
+        onClick: async (btn) => {
+          clusteringEnabled.value = false;
           toRaw(clusters.value).disableClustering();
-        }
+          btn.state('clustering-disabled');
+        },
       },
-    },
+      {
+        stateName: 'clustering-disabled',
+        title: 'Enable clustering',
+        icon: 'fa-arrows-to-circle fa-lg',
+        onClick: async (btn) => {
+          clusteringEnabled.value = true;
+          toRaw(clusters.value).enableClustering();
+          btn.state('clustering-enabled');
+        },
+      },
     ],
   }).addTo(toRaw(map.value))
   
