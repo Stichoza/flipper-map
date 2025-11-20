@@ -190,9 +190,9 @@ onMounted(async () => {
       icon: 'fa-circle-nodes fa-lg',
       onClick: async () => {
         if (clusteringEnabled.value = !clusteringEnabled.value) {
-          toRaw(clusters.value).disableClustering();
-        } else {
           toRaw(clusters.value).enableClustering();
+        } else {
+          toRaw(clusters.value).disableClustering();
         }
       },
     },
