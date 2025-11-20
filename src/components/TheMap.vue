@@ -88,7 +88,7 @@ onMounted(async () => {
   clusters.value = L.markerClusterGroup({
     maxClusterRadius: zoom => zoom < 3 ? 40 : 30,
     animateAddingMarkers: true,
-    disableClusteringAtZoom: 17
+    disableClusteringAtZoom: 18
   }).addTo(toRaw(map.value));
   
   let centerWasSet = false;
