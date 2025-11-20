@@ -399,6 +399,9 @@ window.jsRelocateFile = (hash) => {
   // Enter move mode
   isMovingPin.value = true;
   movingPinHash.value = hash;
+
+  // Disable clustering
+  toRaw(clusters.value).disableClustering();
   
   // Close any open popups
   toRaw(map.value).closePopup();
@@ -452,6 +455,11 @@ const cancelMovePin = () => {
   }
   
   movingPinHash.value = null;
+
+  // Re-enable clustering if it was enabled before
+  if (clusteringEnabled.value) {
+    toRaw(clusters.value).enableClustering();
+  }
 }
 
 const savePinLocation = () => {
@@ -482,6 +490,11 @@ const savePinLocation = () => {
   
   isMovingPin.value = false;
   movingPinHash.value = null;
+
+  // Re-enable clustering if it was enabled before
+  if (clusteringEnabled.value) {
+    toRaw(clusters.value).enableClustering();
+  }
 }
 
 window.jsCancelMovePin = cancelMovePin;
