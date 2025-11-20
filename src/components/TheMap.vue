@@ -485,6 +485,7 @@ const savePinLocation = () => {
       
       // TODO: Implement actual file saving to Flipper device later
       notify('Pin location updated', 'success');
+      notify('Unable to persist updated location to Flipper', 'error');
     }
   }
   
