@@ -8,6 +8,7 @@ import L from 'leaflet';
 import 'leaflet-easybutton';
 import 'leaflet.marker.slideto';
 import 'leaflet.markercluster';
+import 'leaflet.markercluster.freezable';
 import SmoothMarkerBouncing from 'leaflet.smooth_marker_bouncing';
 
 SmoothMarkerBouncing(L);
@@ -36,6 +37,7 @@ const userMarker = ref(null);
 const defaultZoom = 17;
 const isMovingPin = ref(false);
 const movingPinHash = ref(null);
+const clusteringEnabled = ref(true);
 
 const location = useLocationStore()
 const flipper = useFlipperStore()
@@ -179,19 +181,23 @@ onMounted(async () => {
     emit('select-pin', null);
   });
   
-  // L.easyButton({
-  //   position: 'topleft',
-  //   states: [
-  //   {
-  //     stateName: 'clustering-button',
-  //     title: 'Toggle clustering',
-  //     icon: 'fa-circle-nodes fa-lg',
-  //     onClick: async () => {
-  //       // TODO: Toggle clustering
-  //     },
-  //   },
-  //   ],
-  // }).addTo(toRaw(map.value))
+  L.easyButton({
+    position: 'topleft',
+    states: [
+    {
+      stateName: 'clustering-button',
+      title: 'Toggle clustering',
+      icon: 'fa-circle-nodes fa-lg',
+      onClick: async () => {
+        if (clusteringEnabled.value = !clusteringEnabled.value) {
+          toRaw(clusters.value).disableClustering();
+        } else {
+          toRaw(clusters.value).enableClustering();
+        }
+      },
+    },
+    ],
+  }).addTo(toRaw(map.value))
   
   L.control.layers(layers).addTo(toRaw(map.value));
   
