@@ -196,6 +196,7 @@ export const useFlipperStore = defineStore('flipper', () => {
 
       if (
         line.toLowerCase().startsWith('key:') ||
+        line.toLowerCase().startsWith('uid:') ||
         line.toLowerCase().startsWith('rom data:')
       ) {
         const key = line.split(':').pop().trim();
