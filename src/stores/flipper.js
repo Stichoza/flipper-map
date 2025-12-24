@@ -43,6 +43,7 @@ export const useFlipperStore = defineStore('flipper', () => {
     '/ext/subghz',
     '/ext/nfc',
     '/ext/lfrfid',
+    '/ext/ibutton'
   ];
   
   const connect = async () => {
@@ -131,7 +132,7 @@ export const useFlipperStore = defineStore('flipper', () => {
           path: file,
           pathOnly: file.substring(0, file.lastIndexOf('/') + 1),
           extension: file.split('.').pop(),
-          type: {sub: 'subghz', nfc: 'nfc', rfid: 'rfid'}[file.split('.').pop()],
+          type: {sub: 'subghz', nfc: 'nfc', rfid: 'rfid', ibtn: 'ibutton'}[file.split('.').pop()],
           content: '',
           latitude: null,
           longitude: null,
@@ -159,7 +160,7 @@ export const useFlipperStore = defineStore('flipper', () => {
     }
 
     if (isSyncing.value && isProcessingDirectories.value) {
-      const matches = line.match(/\[\F\]\s+(\/ext\/(subghz|nfc|lfrfid)\/[A-Za-z0-9_,\+\-\s\./\(\)]+\.(sub|nfc|rfid))\s\d+b/m)
+      const matches = line.match(/\[\F\]\s+(\/ext\/(subghz|nfc|lfrfid|ibutton)\/[A-Za-z0-9_,\+\-\s\./\(\)]+\.(sub|nfc|rfid|ibtn))\s\d+b/m)
 
       if (matches && matches[1]) {
         const filePath = matches[1];
@@ -193,7 +194,10 @@ export const useFlipperStore = defineStore('flipper', () => {
         currentFile.value.longitude = parseFloat(line.split(':').pop()) || null;
       }
 
-      if (line.toLowerCase().startsWith('key:')) {
+      if (
+        line.toLowerCase().startsWith('key:') ||
+        line.toLowerCase().startsWith('rom data:')
+      ) {
         const key = line.split(':').pop().trim();
         const keyPrefix = key.substring(0, key.length - 2);
         currentFile.value.key = key;
@@ -299,7 +303,7 @@ export const useFlipperStore = defineStore('flipper', () => {
   const launchFile = async (file) => {
     if (!writer.value || !isConnected.value) return;
 
-    const app = {subghz: 'Sub-GHz', nfc: 'NFC', rfid: '"125 kHz RFID"'}[file.type]; // lowercase names like nfc or lfrfid does not work for some reason, subghz works.
+    const app = {subghz: 'Sub-GHz', nfc: 'NFC', rfid: '"125 kHz RFID"', ibutton: 'iButton'}[file.type]; // lowercase names like nfc or lfrfid does not work for some reason, subghz works.
 
     console.log(`Launchung ${app} file: ${file.path}`);
     
@@ -374,6 +378,8 @@ export const useFlipperStore = defineStore('flipper', () => {
         return 'wifi';
       case 'rfid':
         return 'id-card-clip';
+      case 'ibutton':
+        return 'record-vinyl';
       default:
         return 'question';
     }
