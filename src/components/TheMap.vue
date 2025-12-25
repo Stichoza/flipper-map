@@ -275,7 +275,7 @@ const createPopup = file => {
   const uid = file.content.match(/uid:\s*(.+)/i)?.[1];
   const keyType = file.content.match(/key type:\s*(.+)/i)?.[1];
   const data = file.content.match(/data:\s*(.+)/i)?.[1]; // Show only with keyType (RFID), otherwise it will display RAW SubGHz data
-  const type = {subghz: 'Sub-GHz', nfc: 'NFC', rfid: 'RFID'}[file.type] ?? file.type;
+  const type = {subghz: 'Sub-GHz', nfc: 'NFC', rfid: 'RFID', ibutton: 'iButton'}[file.type] ?? file.type;
   const openVerb = file.type === 'subghz' ? 'Open on Flipper' : 'Emulate on Flipper';
   const hasLocation = file.latitude && file.longitude;
 
