@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Setting GPS Coordinates — Flipper Map</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            color: #1d1d1f;
+            background: #ffffff;
+            padding: 24px 20px 48px;
+            max-width: 680px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            font-size: 15px;
+            color: #6e6e73;
+            margin-bottom: 32px;
+        }
+
+        h2 {
+            font-size: 20px;
+            font-weight: 600;
+            margin-top: 36px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        h2 .badge {
+            font-size: 12px;
+            font-weight: 600;
+            padding: 2px 8px;
+            border-radius: 4px;
+            color: #fff;
+        }
+
+        .badge-easy {
+            background: #34c759;
+        }
+
+        .badge-auto {
+            background: #007aff;
+        }
+
+        .badge-advanced {
+            background: #8e8e93;
+        }
+
+        p {
+            font-size: 15px;
+            color: #1d1d1f;
+            margin-bottom: 12px;
+        }
+
+        .note {
+            font-size: 14px;
+            color: #6e6e73;
+            background: #f5f5f7;
+            border-radius: 10px;
+            padding: 12px 16px;
+            margin: 12px 0;
+        }
+
+        .note strong {
+            color: #1d1d1f;
+        }
+
+        .warning {
+            background: #fff3cd;
+            color: #664d03;
+        }
+
+        .warning strong {
+            color: #664d03;
+        }
+
+        .steps {
+            list-style: none;
+            margin: 16px 0;
+            padding: 0;
+        }
+
+        .steps li {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 12px;
+            font-size: 15px;
+        }
+
+        .step-number {
+            flex-shrink: 0;
+            width: 26px;
+            height: 26px;
+            background: #ff8200;
+            color: #fff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .code-block {
+            background: #1d1d1f;
+            color: #f5f5f7;
+            border-radius: 10px;
+            padding: 16px 20px;
+            font-family: "SF Mono", SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+            font-size: 13px;
+            line-height: 1.8;
+            overflow-x: auto;
+            margin: 12px 0;
+        }
+
+        .code-block .highlight {
+            color: #30d158;
+            font-weight: 600;
+        }
+
+        .code-block .comment {
+            color: #6e6e73;
+        }
+
+        hr {
+            border: none;
+            border-top: 1px solid #e5e5ea;
+            margin: 32px 0;
+        }
+
+        .faq {
+            margin-top: 16px;
+        }
+
+        .faq details {
+            margin-bottom: 8px;
+            border: 1px solid #e5e5ea;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .faq summary {
+            font-size: 15px;
+            font-weight: 500;
+            padding: 12px 16px;
+            cursor: pointer;
+            background: #f5f5f7;
+        }
+
+        .faq summary:hover {
+            background: #ececf0;
+        }
+
+        .faq .answer {
+            padding: 12px 16px;
+            font-size: 14px;
+            color: #3a3a3c;
+        }
+
+        footer {
+            margin-top: 40px;
+            text-align: center;
+            font-size: 13px;
+            color: #8e8e93;
+        }
+
+        footer a {
+            color: #ff8200;
+            text-decoration: none;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            body {
+                background: #000000;
+                color: #f5f5f7;
+            }
+
+            p, .steps li {
+                color: #f5f5f7;
+            }
+
+            .note {
+                background: #1c1c1e;
+                color: #a1a1a6;
+            }
+
+            .note strong {
+                color: #f5f5f7;
+            }
+
+            .warning {
+                background: #3a2f00;
+                color: #ffd60a;
+            }
+
+            .warning strong {
+                color: #ffd60a;
+            }
+
+            .faq details {
+                border-color: #38383a;
+            }
+
+            .faq summary {
+                background: #1c1c1e;
+                color: #f5f5f7;
+            }
+
+            .faq summary:hover {
+                background: #2c2c2e;
+            }
+
+            .faq .answer {
+                color: #a1a1a6;
+            }
+
+            .code-block {
+                background: #1c1c1e;
+            }
+
+            hr {
+                border-color: #38383a;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Flipper Map</h1>
+    <p>Flipper Map is a companion app for <strong>Flipper Zero</strong> that connects to your device over Bluetooth and displays all your Sub-GHz signal files on an interactive map. Browse, search, and organize your saved signals by location — and send them directly from your phone, Apple Watch, or CarPlay when you're nearby.</p>
+
+    <div class="note">
+        <strong>How it works:</strong> Flipper Map reads <code>.sub</code> files from your Flipper's SD card, extracts GPS coordinates embedded in them, and plots each signal on the map. When you're within range of a saved signal, you can transmit it with a single tap.
+    </div>
+
+    <hr>
+
+    <h1>Setting GPS Coordinates</h1>
+    <p class="subtitle">There are several ways to add location data to your Flipper Zero signal files.</p>
+
+    <!-- Method 1 -->
+    <h2>Using Flipper Map <span class="badge badge-easy">Easiest</span></h2>
+    <p>Set or update the location of any signal file directly from the app — no tools or file editing required.</p>
+    <ol class="steps">
+        <li>
+            <span class="step-number">1</span>
+            <span>Select a file from the list or map and open its details.</span>
+        </li>
+        <li>
+            <span class="step-number">2</span>
+            <span>Tap <strong>Set Location</strong> (or <strong>Move Pin</strong> if the file already has coordinates).</span>
+        </li>
+        <li>
+            <span class="step-number">3</span>
+            <span>Drag the map to position the pin at the desired location.</span>
+        </li>
+        <li>
+            <span class="step-number">4</span>
+            <span>Tap <strong>Save</strong> to write the coordinates to the file on your Flipper.</span>
+        </li>
+    </ol>
+    <div class="note">
+        <strong>Tip:</strong> You can also swipe left on any file in the list and tap the pin icon to enter Move Pin mode.
+    </div>
+
+    <hr>
+
+    <!-- Method 2 -->
+    <h2>Using an External GPS Module <span class="badge badge-auto">Automatic</span></h2>
+    <p>Connect a GPS board to your Flipper Zero via GPIO pins. When you record a signal, the GPS coordinates are automatically embedded in the file.</p>
+    <ol class="steps">
+        <li>
+            <span class="step-number">1</span>
+            <span>Connect a compatible GPS module (e.g., NMEA-compatible UART GPS) to Flipper's GPIO pins.</span>
+        </li>
+        <li>
+            <span class="step-number">2</span>
+            <span>Enable GPS in your Flipper's firmware settings (if supported).</span>
+        </li>
+        <li>
+            <span class="step-number">3</span>
+            <span>Record a Sub-GHz signal as you normally would. The coordinates will be saved automatically.</span>
+        </li>
+    </ol>
+    <div class="note warning">
+        <strong>Note:</strong> The official Flipper Zero firmware does not fully support GPIO GPS yet. This feature may require custom or third-party firmware. Check your firmware documentation for compatibility.
+    </div>
+
+    <hr>
+
+    <!-- Method 3 -->
+    <h2>Manual File Editing <span class="badge badge-advanced">Advanced</span></h2>
+    <p>You can manually add or edit GPS coordinates by modifying the <code>.sub</code> file content on the SD card.</p>
+    <p>Add <code>Lat:</code> and <code>Lon:</code> lines to the file. Place them before the <code>Protocol:</code> line:</p>
+
+    <div class="code-block">
+        <span class="comment"># Example .sub file with GPS coordinates</span><br>
+        Filetype: Flipper SubGhz RAW File<br>
+        Version: 1<br>
+        Frequency: 433920000<br>
+        <span class="highlight">Lat: 41.716667</span><br>
+        <span class="highlight">Lon: 44.783333</span><br>
+        Protocol: Princeton<br>
+        Bit: 24<br>
+        Key: 00 00 00 00 00 12 34 56
+    </div>
+
+    <div class="note">
+        <strong>Format:</strong> Use decimal degrees with up to 6 decimal places. Do not include degree symbols or compass directions — just the numeric value (e.g., <code>Lat: 41.716667</code>). Use negative values for south latitudes and west longitudes.
+    </div>
+
+    <hr>
+
+    <!-- FAQ -->
+    <h2>Frequently Asked Questions</h2>
+    <div class="faq">
+        <details>
+            <summary>What if my file already has wrong coordinates?</summary>
+            <div class="answer">
+                Open the file in Flipper Map, tap <strong>Move Pin</strong>, drag it to the correct location, and tap <strong>Save</strong>. The app will update the coordinates in the file automatically.
+            </div>
+        </details>
+        <details>
+            <summary>Will editing coordinates break my signal file?</summary>
+            <div class="answer">
+                No. The GPS coordinates are metadata — they don't affect the signal data. Your signal will still work the same way regardless of the coordinates.
+            </div>
+        </details>
+        <details>
+            <summary>Can I remove coordinates from a file?</summary>
+            <div class="answer">
+                Currently, Flipper Map does not support removing coordinates. You can manually edit the file on the SD card and delete the <code>Lat:</code> and <code>Lon:</code> lines.
+            </div>
+        </details>
+        <details>
+            <summary>What coordinate formats are supported?</summary>
+            <div class="answer">
+                Flipper Map recognizes <code>Lat:</code> / <code>Lon:</code>, <code>Latitude:</code> / <code>Longitude:</code>, and <code>Lat:</code> / <code>Lng:</code> — all case-insensitive. Values must be in decimal degrees.
+            </div>
+        </details>
+        <details>
+            <summary>Why doesn't my file show on the map?</summary>
+            <div class="answer">
+                The file either doesn't have GPS coordinates, or the coordinates are invalid (e.g., both latitude and longitude are zero). Use one of the methods above to add valid coordinates.
+            </div>
+        </details>
+    </div>
+
+    <hr>
+
+    <footer>
+        <p>Flipper Map &mdash; <a href="https://flipper-map.stichoza.com">flipper-map.stichoza.com</a></p>
+        <p>Flipper Map is not affiliated with or endorsed by Flipper Devices Inc.</p>
+    </footer>
+
+</body>
+</html>
