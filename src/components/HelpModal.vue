@@ -1,3 +1,7 @@
+<script setup>
+import appStoreBadge from '@/assets/app-store-badge.svg';
+</script>
+
 <template>
   <div
     id="helpModal"
@@ -61,6 +65,29 @@ Protocol: Princeton
             <p>
               <span class="fw-bold">Tip</span>: Check out <a href="https://github.com/Stichoza/flipper-nearby-files"><i class="fas fa-location-dot" /> <span class="fw-medium">Nearby Files</span></a> — a native Flipper application for viewing nearby files directly on your Flipper Zero without the need to connect it to your computer using USB cable.
             </p>
+          </div>
+          <div class="mb-2 p-3 rounded border d-flex align-items-center gap-3">
+            <div class="flex-grow-1">
+              <p class="mb-1 fw-semibold small">
+                <i class="fab fa-apple me-1" />Get the iOS &amp; macOS App
+              </p>
+              <p class="mb-0 text-muted small">
+                The native Flipper Map app for iOS and macOS includes more features: Bluetooth connection, Apple Watch support, CarPlay, send signals directly from your phone, and more.
+              </p>
+            </div>
+            <a
+              href="https://apps.apple.com/us/app/flipper-map/id6759526315"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="flex-shrink-0"
+              aria-label="Download Flipper Map on the App Store"
+            >
+              <img
+                :src="appStoreBadge"
+                alt="Download on the App Store"
+                height="38"
+              >
+            </a>
           </div>
         </div>
       </div>
