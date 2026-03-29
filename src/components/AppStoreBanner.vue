@@ -79,15 +79,13 @@ const dismiss = () => {
   right: 0;
 }
 
-@media (prefers-color-scheme: dark) {
-  .app-store-banner {
-    background: #1c1c1e;
-    border-top-color: #38383a;
-  }
+:global(body[data-bs-theme="dark"]) .app-store-banner {
+  background: #1c1c1e;
+  border-top-color: #38383a;
+}
 
-  .banner-title {
-    color: #f5f5f7;
-  }
+:global(body[data-bs-theme="dark"]) .banner-title {
+  color: #f5f5f7;
 }
 
 .app-store-badge-img {
