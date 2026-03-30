@@ -8,6 +8,7 @@ import { useFlipperStore } from '@/stores/flipper';
 import { notify } from '@/helpers/notification.js';
 import SettingsModal from './components/SettingsModal.vue';
 import NonGeolocatedPinModal from './components/NonGeolocatedPinModal.vue';
+import AppStoreBanner from './components/AppStoreBanner.vue';
 
 const location = useLocationStore();
 const flipper = useFlipperStore();
@@ -106,4 +107,5 @@ const handleSearch = (query) => {
   <HelpModal />
   <SettingsModal />
   <NonGeolocatedPinModal />
+  <AppStoreBanner />
 </template>

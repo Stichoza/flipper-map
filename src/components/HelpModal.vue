@@ -1,3 +1,10 @@
+<script setup>
+import { computed } from 'vue';
+
+const isMac = computed(() => /Macintosh|MacIntel|MacPPC|Mac68K/i.test(navigator.userAgent));
+const platformLabel = computed(() => isMac.value ? 'iOS and macOS' : 'iOS');
+</script>
+
 <template>
   <div
     id="helpModal"
@@ -18,6 +25,22 @@
           />
         </div>
         <div class="modal-body px-4">
+          <div class="mb-3 p-3 border rounded bg-body-secondary">
+            <p class="mb-2">
+              The {{ platformLabel }} version of Flipper Map has more features including Bluetooth connectivity, file management, lock screen Live Activity, Apple Watch app, CarPlay app. integrations with Shortcuts pp.
+            </p>
+            <a
+              href="https://apps.apple.com/us/app/flipper-map/id6759526315"
+              target="_blank"
+              class="pull-right"
+            >
+              <img
+                src="/download-on-app-store.svg"
+                alt="Download on the App Store"
+                height="40"
+              >
+            </a>
+          </div>
           <div class="mb-4">
             <ol>
               <li>Connect your Flipper Zero to the computer using USB cable.</li>
