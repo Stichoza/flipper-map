@@ -1,5 +1,10 @@
 # Flipper Map
 
+> [!Tip]
+> **[Flipper Map](https://github.com/Stichoza/flipper-nearby-files) is now available on iOS (iPad and macOS as well) with support of Apple Watch, CarPlay, Siri and Shortcuts. Packed with more features than web version. Get it from  [App Store](https://github.com/Stichoza/flipper-nearby-files).**
+
+---
+
 Connect your Flipper Zero to your computer using USB and visualize signal recordings on map.
 
 **[↗ flipper-map.stichoza.com](https://flipper-map.stichoza.com)**
