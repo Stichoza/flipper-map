@@ -2,7 +2,7 @@
 import { computed } from 'vue';
 
 const isMac = computed(() => /Macintosh|MacIntel|MacPPC|Mac68K/i.test(navigator.userAgent));
-const platformLabel = computed(() => isMac.value ? 'iOS and macOS' : 'iOS');
+const platformLabel = computed(() => isMac.value ? 'iOS/Mac' : 'iOS');
 </script>
 
 <template>
@@ -30,7 +30,7 @@ const platformLabel = computed(() => isMac.value ? 'iOS and macOS' : 'iOS');
               The {{ platformLabel }} version of Flipper Map has more features including Bluetooth connectivity, file management, lock screen Live Activity, Apple Watch app, CarPlay app. integrations with Shortcuts pp.
             </p>
             <a
-              href="https://apps.apple.com/us/app/flipper-map/id6759526315"
+              href="https://apps.apple.com/app/apple-store/id6759526315?pt=128571460&ct=Flipper%20Map%20Web&mt=8"
               target="_blank"
               class="pull-right"
             >

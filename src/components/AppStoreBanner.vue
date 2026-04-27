@@ -24,7 +24,7 @@ const dismiss = () => {
     </div>
     <div class="d-flex align-items-center gap-2">
       <a
-        href="https://apps.apple.com/us/app/flipper-map/id6759526315"
+        href="https://apps.apple.com/app/apple-store/id6759526315?pt=128571460&ct=Flipper%20Map%20Web&mt=8"
         target="_blank"
         class="btn btn-sm btn-light fw-medium rounded-pill px-3 text-nowrap"
       >
