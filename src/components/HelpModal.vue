@@ -26,13 +26,10 @@ const platformLabel = computed(() => isMac.value ? 'iOS/Mac' : 'iOS');
         </div>
         <div class="modal-body px-4">
           <div class="mb-3 p-3 border rounded bg-body-secondary">
-            <p class="mb-2">
-              The {{ platformLabel }} version of Flipper Map has more features including Bluetooth connectivity, file management, lock screen Live Activity, Apple Watch app, CarPlay app. integrations with Shortcuts pp.
-            </p>
             <a
               href="https://apps.apple.com/app/apple-store/id6759526315?pt=128571460&ct=Flipper%20Map%20Web&mt=8"
               target="_blank"
-              class="pull-right"
+              class="float-start me-3"
             >
               <img
                 src="/download-on-app-store.svg"
@@ -40,6 +37,9 @@ const platformLabel = computed(() => isMac.value ? 'iOS/Mac' : 'iOS');
                 height="40"
               >
             </a>
+            <p class="mb-2">
+              The {{ platformLabel }} version of Flipper Map has more features including Bluetooth connectivity, file management, lock screen Live Activity, Apple Watch app, CarPlay app. Siri commands, integrations with Shortcuts app and much more.
+            </p>
           </div>
           <div class="mb-4">
             <ol>
