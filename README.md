@@ -1,7 +1,9 @@
 # Flipper Map
 
-> [!Tip]
-> **[Flipper Map](https://github.com/Stichoza/flipper-nearby-files) is now available on iOS (iPad and macOS as well) with support of Apple Watch, CarPlay, Siri and Shortcuts. Packed with more features than web version. Get it from  [App Store](https://github.com/Stichoza/flipper-nearby-files).**
+> [!IMPORTANT]
+> <a href="https://github.com/Stichoza/flipper-nearby-files"><img src="public/download-on-app-store.svg" align="right" alt="Download on the App Store"></a>
+> 
+> **[Flipper Map](https://github.com/Stichoza/flipper-nearby-files) is now available on iOS (iPad and macOS as well) with support of Apple Watch, CarPlay, Siri and Shortcuts. Packed with more features than web version.**
 
 ---
 
